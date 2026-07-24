@@ -27,10 +27,11 @@ jobs:
           DAST_TARGET_URL: http://127.0.0.1:8080
       - name: Run ZAP authenticated scan
         run: |
-          docker run --network host -v ${{ github.workspace }}:/zap/wrk/:rw \
+          docker run --network host -u root -v ${{ github.workspace }}:/zap/wrk/:rw \
             -e DAST_TARGET_URL -e DAST_USERNAME -e DAST_PASSWORD \
             ghcr.io/zaproxy/zaproxy:stable \
             zap.sh -cmd -port 8090 -autorun /zap/wrk/.zap/plan.yaml
+          mv results.sarif.json results.sarif 2>/dev/null || true
         env:
           DAST_TARGET_URL: http://127.0.0.1:8080
           DAST_USERNAME: admin
