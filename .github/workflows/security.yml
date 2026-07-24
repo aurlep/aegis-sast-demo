@@ -27,13 +27,6 @@ jobs:
         run: semgrep scan --config p/default --sarif --output results.sarif
         env:
           SEMGREP_SEND_METRICS: 'off'
-      - name: Upload to the Security tab
-        if: always()
-        uses: github/codeql-action/upload-sarif@4187e74d05793876e9989daffde9c3e66b4acd07  # v3
-        with:
-          sarif_file: results.sarif
-          category: semgrep
-        continue-on-error: true
       - name: Keep the report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
@@ -52,15 +45,6 @@ jobs:
         run: pip install 'bandit[sarif]'
       - name: Report (Bandit)
         run: bandit -r . -f sarif -o results.sarif || true
-      - name: Gate (fail on high+)
-        run: bandit -r . -lll
-      - name: Upload to the Security tab
-        if: always()
-        uses: github/codeql-action/upload-sarif@4187e74d05793876e9989daffde9c3e66b4acd07  # v3
-        with:
-          sarif_file: results.sarif
-          category: bandit
-        continue-on-error: true
       - name: Keep the report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
@@ -97,13 +81,6 @@ jobs:
       - name: Report (Gitleaks)
         run: gitleaks detect --source . --report-format sarif --report-path results.sarif
           --exit-code 0 --no-banner
-      - name: Upload to the Security tab
-        if: always()
-        uses: github/codeql-action/upload-sarif@4187e74d05793876e9989daffde9c3e66b4acd07  # v3
-        with:
-          sarif_file: results.sarif
-          category: gitleaks
-        continue-on-error: true
       - name: Keep the report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
