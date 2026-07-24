@@ -30,7 +30,7 @@ jobs:
           docker run --network host -v ${{ github.workspace }}:/zap/wrk/:rw \
             -e DAST_TARGET_URL -e DAST_USERNAME -e DAST_PASSWORD \
             ghcr.io/zaproxy/zaproxy:stable \
-            zap.sh -cmd -autorun /zap/wrk/.zap/plan.yaml
+            zap.sh -cmd -port 8090 -autorun /zap/wrk/.zap/plan.yaml
         env:
           DAST_TARGET_URL: http://127.0.0.1:8080
           DAST_USERNAME: admin
